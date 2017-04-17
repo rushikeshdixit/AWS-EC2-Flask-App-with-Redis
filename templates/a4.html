@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script   src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+  <script>
+      $(document).ready(function() {
+        $("#uncached_form").submit(function(event) {
+          event.preventDefault();	
+      	  $.ajax({
+	    type: "POST",
+            url: "/Uncached",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify($("#uncached_form").serialize()),
+            success: function(result) {
+              console.log("Successfully called uncached function");
+              var res = JSON.parse(result);
+              $("#uncached_time").html("Time taken : "+res["data"]+ " ms");
+            } 
+      	  });
+        });
+
+        $("#cached_form").submit(function(event) {
+          event.preventDefault();       
+          $.ajax({
+            type: "POST",
+            url: "/Cached",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify($("#cached_form").serialize()),
+            success: function(result) {
+              console.log("Successfully called cached function");
+              var res = JSON.parse(result);
+              $("#cached_time").html("Time taken : "+ res["data"]+ " ms");
+            } 
+          });
+        });
+      });
+  </script>
+</head>
+<body>
+ <div class="container">
+   <h1>Make your Choice</h1>
+   <form id="uncached_form" method="POST">
+      <input type="submit" name="Uncached" value="Uncached">
+   </form>
+   <p id="uncached_time"></p>
+   <form id="cached_form" action="/Cached"  method="POST">
+	<input type="submit" name="Cached" value="Cached">
+   </form>
+   <p id="cached_time"></p>
+</div>
+</body>
+</html>
